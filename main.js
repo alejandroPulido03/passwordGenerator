@@ -1,6 +1,7 @@
 const setterPassword = document.forms['passwordSetter'];
 const sendButton = setterPassword[5 /*Button*/];
 const viewerPassword = document.getElementById('passwordSpace');
+const clipboard = document.getElementById('clipboardButton');
 
 const dictionaryAscciCodes = {
     includeUpper: [65,90],
@@ -23,7 +24,9 @@ const doAPass = () => {
     const paramsTypes = [ ... setterPassword.elements].slice(1,5);
     let paramsAcepted = paramsTypes.filter(check => check.checked == true)
 
-    if(lengthVal > 0 && lengthVal <=100 && paramsAcepted.length > 0) viewerPassword.innerText = createPass(paramsAcepted, lengthVal)
+    if(lengthVal > 0 && lengthVal <=100 && paramsAcepted.length > 0) {
+        viewerPassword.value = createPass(paramsAcepted, lengthVal)
+    }
     else if (paramsAcepted.length == 0) warning('Select the params for your password')
     else warning('The length of the password must be between 1 and 100')
 }
@@ -41,3 +44,13 @@ const createPass = (types, passLength) => {
 }
 
 //TODO: Do the copy button func
+
+clipboard.onclick = () =>{
+    viewerPassword.focus();
+    document.execCommand('selectall');
+    document.execCommand('copy');
+    document.querySelector('.passwordGenerator-container').classList.toggle('clipboard-succes')
+    setTimeout(() => {
+        document.querySelector('.passwordGenerator-container').classList.toggle('clipboard-succes')
+    }, 2000);
+}
