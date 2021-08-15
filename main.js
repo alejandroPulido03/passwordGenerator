@@ -12,19 +12,20 @@ const dictionaryAscciCodes = {
 sendButton.onclick = () => doAPass();
 
 const warning = (typeError) =>{
-    //TODO: Do the popup of the errors (the number of the error give the text)
-    return 300
+    document.querySelector('.passwordGenerator-container').insertAdjacentHTML('beforeend', `<span class='warning'>${typeError}</span>`)
+    
+    setTimeout(()=> [... document.getElementsByClassName('warning')].forEach((e) => e.classList.add('warning-close')), 2700)
+
 }
 
 const doAPass = () => {
     let lengthVal = setterPassword['passwordLength'].value;
-    //TODO: Verify if lenght > 0
-    let lengthPassword = lengthVal <= 300 ? lengthVal : warning(100) ;
-    //TODO: Verify if is there some param (length > 0)
-    let paramsTypes = [ ... setterPassword.elements].slice(1,5);
+    const paramsTypes = [ ... setterPassword.elements].slice(1,5);
     let paramsAcepted = paramsTypes.filter(check => check.checked == true)
 
-    viewerPassword.innerText = createPass(paramsAcepted, lengthPassword)
+    if(lengthVal > 0 && lengthVal <=100 && paramsAcepted.length > 0) viewerPassword.innerText = createPass(paramsAcepted, lengthVal)
+    else if (paramsAcepted.length == 0) warning('Select the params for your password')
+    else warning('The length of the password must be between 1 and 100')
 }
 
 const setCode = (range) => Math.floor(Math.random() * (range[1] - range[0]) + range[0])
